@@ -1,0 +1,115 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=description content><link href=https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css rel=stylesheet integrity=sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi crossorigin=anonymous><link href=https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css rel=stylesheet><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin=anonymous referrerpolicy=no-referrer><link rel=stylesheet href=https://www.vvisveswaran.xyz/css/profile.css><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700&family=Fira+Code&display=swap" rel=stylesheet><title>Automating Your Hugo Blog: GitHub Pages Deployment & Playwright Testing</title></head><body class=profile-page><nav class="navbar sticky-top navbar-expand-lg"><div class="container-fluid container"><button class=navbar-toggler type=button data-bs-toggle=collapse data-bs-target=#navbarToggler aria-controls=navbarToggler aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse" id=navbarToggler><ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center"><li class=nav-item><a class="nav-link active" aria-current=page href=https://www.vvisveswaran.xyz/>Home</a></li><li class=nav-item><a class=nav-link href=https://www.vvisveswaran.xyz/blog/>Ramblings</a></li><li class=nav-item><a class=nav-link href=https://www.vvisveswaran.xyz/about/>About</a></li><li class="nav-item ms-lg-3"><div class=theme-switch-wrapper><label class=theme-switch for=checkbox><input type=checkbox id=checkbox><div class=slider><i class="fas fa-sun icon"></i>
+<i class="fas fa-moon icon"></i></div></label></div></li></ul></div></div></nav><script src=https://www.vvisveswaran.xyz/js/theme.js></script><main><div class=container style=padding-top:100px;padding-bottom:50px><article class=post-single><header class=post-header><h1 class=post-title>Automating Your Hugo Blog: GitHub Pages Deployment & Playwright Testing</h1><div class=post-meta style=color:var(--text-muted);margin-bottom:2rem><time>December 14, 2024</time></div></header><div class=post-content style="background:var(--bg-card);padding:2rem;border-radius:12px;border:1px solid rgba(255,255,255,5%)"><p>Building a personal portfolio or blog is a rite of passage for many developers. I recently rebuilt my site using <a href=https://gohugo.io/>Hugo</a>, a fantastic static site generator known for its speed and flexibility. But hosting the code is only half the battle. I wanted a modern CI/CD pipeline that would:</p><ol><li><strong>Automatically deploy</strong> my site to GitHub Pages whenever I push to <code>main</code>.</li><li><strong>Automatically test</strong> my site to ensure I haven&rsquo;t broken anything before merging changes.</li></ol><p>In this post, I&rsquo;ll walk you through how I set up this automated workflow using <strong>GitHub Actions</strong> and <strong>Playwright</strong>.</p><h2 id=the-infrastructure>The Infrastructure</h2><p>My setup relies on a few key components:</p><ul><li><strong>Source Code</strong>: Hosted in a dedicated GitHub repository (e.g., <code>github-pages-source</code>).</li><li><strong>Hosting</strong>: GitHub Pages, served from a <code>gh-pages</code> branch in a separate repository (or the same one, depending on your preference).</li><li><strong>Testing</strong>: <a href=https://playwright.dev/>Playwright</a> for end-to-end testing.</li></ul><h2 id=step-1-automated-deployment-with-github-actions>Step 1: Automated Deployment with GitHub Actions</h2><p>First, let&rsquo;s tackle deployment. I use a GitHub Action workflow defined in <code>.github/workflows/deploy.yml</code>. This workflow triggers on every push to the <code>main</code> branch.</p><p>Here is the breakdown of my deployment workflow:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>name</span>: <span style=color:#ae81ff>Deploy to GitHub Pages</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>on</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>push</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>branches</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>jobs</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>deploy</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>ubuntu-latest</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>concurrency</span>:
+</span></span><span style=display:flex><span>      <span style=color:#f92672>group</span>: <span style=color:#ae81ff>${{ github.workflow }}-${{ github.ref }}</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>steps</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v4</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>submodules</span>: <span style=color:#66d9ef>true</span>  <span style=color:#75715e># Key for Hugo themes included as submodules</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>fetch-depth</span>: <span style=color:#ae81ff>0</span>    <span style=color:#75715e># accurate git history for Hugo&#39;s .GitInfo</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Setup Hugo</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-hugo@v3</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>hugo-version</span>: <span style=color:#e6db74>&#39;latest&#39;</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>extended</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Build</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>run</span>: <span style=color:#ae81ff>hugo --minify</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Deploy</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-gh-pages@v4</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>if</span>: <span style=color:#ae81ff>${{ github.ref == &#39;refs/heads/main&#39; }}</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>          <span style=color:#f92672>external_repository</span>: <span style=color:#ae81ff>StaticVish/staticvish.github.io</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>publish_branch</span>: <span style=color:#ae81ff>gh-pages</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>publish_dir</span>: <span style=color:#ae81ff>./public</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>personal_token</span>: <span style=color:#ae81ff>${{ secrets.DEPLOY_TO_PAGES_TOKEN }}</span>
+</span></span><span style=display:flex><span>          <span style=color:#f92672>commit_message</span>: <span style=color:#ae81ff>${{ github.event.head_commit.message }}</span>
+</span></span></code></pre></div><p><strong>Key Takeaways:</strong></p><ul><li><strong><code>submodules: true</code></strong>: Essential if you use a Hugo theme as a git submodule.</li><li><strong><code>peaceiris/actions-hugo</code></strong>: Sets up the Hugo environment.</li><li><strong><code>peaceiris/actions-gh-pages</code></strong>: The magic action that takes the built site (in <code>./public</code>) and pushes it to the <code>gh-pages</code> branch of my hosting repository (<code>StaticVish/staticvish.github.io</code>).</li></ul><h2 id=step-2-integrating-playwright-for-e2e-testing>Step 2: Integrating Playwright for E2E Testing</h2><p>Deploying is great, but deploying <em>broken</em> code is effectively automated embarrassment. That&rsquo;s where <strong>Playwright</strong> comes in. I use it to run end-to-end tests against my site.</p><p>First, I installed Playwright and its dependencies:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>npm init -y
+</span></span><span style=display:flex><span>npm install --save-dev @playwright/test
+</span></span><span style=display:flex><span>npx playwright install
+</span></span></code></pre></div><p>This created a <code>playwright.config.ts</code> file, where I configured the test environment. A crucial part of this config is the <code>webServer</code> block, which tells Playwright how to spin up my local Hugo server before running tests:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-typescript data-lang=typescript><span style=display:flex><span><span style=color:#75715e>// playwright.config.ts
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>defineConfig</span>, <span style=color:#a6e22e>devices</span> } <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#39;@playwright/test&#39;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>default</span> <span style=color:#a6e22e>defineConfig</span>({
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>testDir</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;./tests&#39;</span>,
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// ... other config ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>webServer</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>command</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;hugo server -D -p 1313&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>url</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;http://localhost:1313&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>reuseExistingServer</span><span style=color:#f92672>:</span> <span style=color:#f92672>!</span><span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>env</span>.<span style=color:#a6e22e>CI</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>stdout</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;ignore&#39;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>stderr</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;pipe&#39;</span>,
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>projects</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;chromium&#39;</span>, <span style=color:#a6e22e>use</span><span style=color:#f92672>:</span> { ...<span style=color:#a6e22e>devices</span>[<span style=color:#e6db74>&#39;Desktop Chrome&#39;</span>] } },
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;firefox&#39;</span>, <span style=color:#a6e22e>use</span><span style=color:#f92672>:</span> { ...<span style=color:#a6e22e>devices</span>[<span style=color:#e6db74>&#39;Desktop Firefox&#39;</span>] } },
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;webkit&#39;</span>, <span style=color:#a6e22e>use</span><span style=color:#f92672>:</span> { ...<span style=color:#a6e22e>devices</span>[<span style=color:#e6db74>&#39;Desktop Safari&#39;</span>] } },
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Mobile Chrome&#39;</span>, <span style=color:#a6e22e>use</span><span style=color:#f92672>:</span> { ...<span style=color:#a6e22e>devices</span>[<span style=color:#e6db74>&#39;Pixel 5&#39;</span>] } },
+</span></span><span style=display:flex><span>    { <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;Mobile Safari&#39;</span>, <span style=color:#a6e22e>use</span><span style=color:#f92672>:</span> { ...<span style=color:#a6e22e>devices</span>[<span style=color:#e6db74>&#39;iPhone 12&#39;</span>] } },
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>});
+</span></span></code></pre></div><p>This ensures that when Playwright runs, it tests against a live, locally served version of my blog.</p><h2 id=step-3-automating-tests-on-every-pr>Step 3: Automating Tests on Every PR</h2><p>Finally, I created a second workflow, <code>.github/workflows/playwright.yml</code>, to run these tests automatically whenever I open a Pull Request or push to <code>main</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>name</span>: <span style=color:#ae81ff>Playwright Tests</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>on</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>push</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>branches</span>: [ <span style=color:#ae81ff>main ]</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>pull_request</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>branches</span>: [ <span style=color:#ae81ff>main ]</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>jobs</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>test</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>timeout-minutes</span>: <span style=color:#ae81ff>60</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>runs-on</span>: <span style=color:#ae81ff>ubuntu-latest</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>steps</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/checkout@v4</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>submodules</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>fetch-depth</span>: <span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Setup Node</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/setup-node@v4</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>node-version</span>: <span style=color:#e6db74>&#39;lts/*&#39;</span>
+</span></span><span style=display:flex><span>        
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Setup Hugo</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>peaceiris/actions-hugo@v3</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>hugo-version</span>: <span style=color:#e6db74>&#39;latest&#39;</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>extended</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Build Site</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>hugo --minify</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Install dependencies</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>npm ci</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Install Playwright Browsers</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>npx playwright install --with-deps</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Run Playwright tests</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>run</span>: <span style=color:#ae81ff>npx playwright test</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    - <span style=color:#f92672>uses</span>: <span style=color:#ae81ff>actions/upload-artifact@v4</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>if</span>: <span style=color:#ae81ff>always()</span>
+</span></span><span style=display:flex><span>      <span style=color:#f92672>with</span>:
+</span></span><span style=display:flex><span>        <span style=color:#f92672>name</span>: <span style=color:#ae81ff>playwright-report</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>path</span>: <span style=color:#ae81ff>playwright-report/</span>
+</span></span><span style=display:flex><span>        <span style=color:#f92672>retention-days</span>: <span style=color:#ae81ff>30</span>
+</span></span></code></pre></div><p>Now, if I make a change that breaks the layout or causes a regression, the CI pipeline will catch it <em>before</em> it gets deployed to production.</p><h2 id=conclusion>Conclusion</h2><p>By combining Hugo&rsquo;s speed, GitHub Pages&rsquo; free hosting, and Playwright&rsquo;s robust testing, I&rsquo;ve created a resilient simplified DevOps pipeline for my personal brand. It allows me to focus on writing content and coding, knowing that the &ldquo;boring stuff&rdquo; like deployment and verification is handled automatically.</p><p>Check out the full source code in my <a href=https://github.com/StaticVish/github-pages-source>GitHub repository</a>.</p></div><div class=post-tags style=margin-top:2rem><a href=https://www.vvisveswaran.xyz/tags/github-actions style=color:var(--primary-color);text-decoration:none;margin-right:10px>#GitHub Actions</a>
+<a href=https://www.vvisveswaran.xyz/tags/playwright style=color:var(--primary-color);text-decoration:none;margin-right:10px>#Playwright</a>
+<a href=https://www.vvisveswaran.xyz/tags/hugo style=color:var(--primary-color);text-decoration:none;margin-right:10px>#Hugo</a>
+<a href=https://www.vvisveswaran.xyz/tags/ci/cd style=color:var(--primary-color);text-decoration:none;margin-right:10px>#CI/CD</a></div></article></div></main><footer class=site-footer><div class=container><h3>Let's Connect</h3><div class=social-links><a href=https://twitter.com/StaticVish target=_blank class=social-link aria-label=twitter><i class="fab fa-twitter"></i>
+</a><a href=https://github.com/StaticVish target=_blank class=social-link aria-label=github><i class="fab fa-github"></i>
+</a><a href=https://www.linkedin.com/in/visveswaran-vaidyanathan/ target=_blank class=social-link aria-label=linkedin><i class="fab fa-linkedin"></i></a></div><p class=footer-copy>&copy; 2025 Visveswaran Vaidyanathan.</p></div></footer><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js integrity=sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3 crossorigin=anonymous></script></body></html>
