@@ -305,6 +305,18 @@ h6 {
     border-bottom: 1px solid var(--border-color);
 }
 
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+body.light-mode .navbar-toggler-icon {
+    filter: none;
+}
+
 .nav-links {
     display: flex;
     gap: 32px;
