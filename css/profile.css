@@ -1,0 +1,741 @@
+
+/* Profile Page Custom Styles - Professional Theme */
+:root {
+    /* "Hugo Blox" inspired Slate Monochromatic Palette */
+    --primary-color: #cbd5e1;
+    /* Slate 300 - High contrast against Slate 900 */
+    --primary-hover: #e2e8f0;
+    /* Slate 200 */
+
+    --bg-dark: #0f172a;
+    /* Slate 900 - Deep, professional background */
+    --bg-card: #1e293b;
+    /* Slate 800 - Subtle card contrast */
+    --bg-card-hover: #334155;
+    /* Slate 700 */
+
+    --text-main: #f1f5f9;
+    /* Slate 100 - High legibility */
+    --text-muted: #94a3b8;
+    /* Slate 400 */
+
+    --border-color: rgba(255, 255, 255, 0.08);
+
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+body.profile-page {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    margin: 0;
+    line-height: 1.7;
+    /* Slightly increased for readability */
+    -webkit-font-smoothing: antialiased;
+    padding-top: 80px;
+    /* Prevent fixed header from overlapping content */
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-in {
+    animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Utility */
+.container {
+    max-width: 1100px;
+    /* Slightly tighter for better readability */
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.section-title {
+    font-size: 2.25rem;
+    margin-bottom: 4rem;
+    text-align: center;
+    position: relative;
+    display: table;
+    /* Centers the border */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Clean underline instead of gradient */
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    /* Clean gradient, less aggressive */
+    background: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg-dark) 60%);
+}
+
+.hero-content h1 {
+    font-size: 4.5rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+    /* Subtle gradient text */
+    background: linear-gradient(to bottom right, #ffffff, #cbd5e1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    font-weight: 400;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.scroll-down-btn {
+    display: inline-block;
+    color: var(--text-muted);
+    font-size: 2rem;
+    text-decoration: none;
+    animation: bounce 2s infinite;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.scroll-down-btn:hover {
+    color: var(--primary-color);
+}
+
+/* Experience Section - Card Style */
+.timeline {
+    position: relative;
+    padding: 4rem 0;
+    max-width: 900px;
+    /* Constrain width for better card look */
+    margin: 0 auto;
+}
+
+/* Remove center line for a cleaner stacked card look OR keep subtle */
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 24px;
+    /* Move to left for a standard list view on all sizes if desired, or keep centered. Let's keep centered for desktop but cleaner line. */
+    width: 2px;
+    background: var(--bg-card);
+    display: none;
+    /* Hide line for "Blox" style, favor cards */
+}
+
+/* Re-implementing a "Blox" grid style instead of zig-zag timeline */
+.timeline-item {
+    width: 100%;
+    margin-bottom: 2rem;
+    padding: 0;
+    left: 0;
+    text-align: left;
+}
+
+.timeline-item:nth-child(odd),
+.timeline-item:nth-child(even) {
+    left: 0;
+    padding: 0;
+    text-align: left;
+}
+
+.timeline-content {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 8px;
+    /* Standard Blox radius */
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline-content:hover {
+    border-color: var(--primary-color);
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.timeline-role {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.timeline-company {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.timeline-date {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-family: var(--font-code);
+}
+
+/* Skills Section - Clean Cards */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+.skill-category {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+    /* Blox usually aligns left */
+}
+
+.skill-category h3 {
+    color: var(--text-main);
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.75rem;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.skill-tag {
+    background: rgba(129, 140, 248, 0.1);
+    color: var(--primary-color);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    /* Sticky navbar */
+    top: 0;
+    width: 100%;
+    padding: 16px 0;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.9);
+    /* Glass effect */
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+/* Higher specificity and !important to override Bootstrap defaults */
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #ffffff !important;
+}
+
+body.light-mode .navbar .nav-link:hover,
+body.light-mode .navbar .nav-link.active {
+    color: var(--text-main) !important;
+}
+
+/* Footer Styles */
+.site-footer {
+    text-align: center;
+    padding: 4rem 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+    background: var(--bg-dark);
+}
+
+.social-links {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.social-link {
+    color: var(--text-muted);
+    font-size: 1.75rem;
+    /* Larger for icons */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+}
+
+.social-link:hover {
+    color: var(--primary-color);
+    background: rgba(129, 140, 248, 0.1);
+    border-color: rgba(129, 140, 248, 0.2);
+    transform: translateY(-4px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 3rem;
+    }
+
+    /* Mobile Navigation */
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 60px;
+        /* Below navbar */
+        left: 0;
+        right: 0;
+        background-color: var(--bg-dark);
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        border-bottom: 1px solid var(--border-color);
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        gap: 1.5rem;
+    }
+
+    .nav-links.active {
+        transform: translateY(0);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .timeline-header {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+
+/* Markdown Content */
+.post-content {
+    color: #cbd5e1;
+    /* Slate 300 */
+    font-size: 1.05rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.post-content h1,
+.post-content h2 {
+    color: #fff;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.post-content a {
+    color: var(--primary-color);
+    border-bottom: 1px solid rgba(129, 140, 248, 0.4);
+}
+
+.post-content a:hover {
+    border-bottom-color: var(--primary-color);
+}
+
+.post-content code {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* --- Dark/Light Mode Toggle & Light Mode Styles --- */
+
+/* Smooth Transition for Theme Switching */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light Mode Overrides */
+body.light-mode {
+    --primary-color: #475569; /* Slate 600 - darker for light bg */
+    --primary-hover: #334155; /* Slate 700 */
+    
+    --bg-dark: #f8fafc; /* Slate 50 */
+    --bg-card: #ffffff; /* White */
+    --bg-card-hover: #f1f5f9; /* Slate 100 */
+    
+    --text-main: #0f172a; /* Slate 900 */
+    --text-muted: #64748b; /* Slate 500 */
+    
+    --border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Adjustments for specific elements in Light Mode */
+body.light-mode .hero {
+    background: radial-gradient(circle at 50% 0%, #e2e8f0 0%, var(--bg-dark) 60%);
+}
+
+body.light-mode .hero-content h1 {
+    background: linear-gradient(to bottom right, #0f172a, #475569);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .navbar {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--border-color);
+}
+
+body.light-mode .timeline-role {
+    color: var(--text-main);
+}
+
+/* Toggle Switch Styles */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: #334155; /* Dark background for the switch initially */
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 34px;
+    border: 1px solid var(--border-color);
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+/* Sun and Moon Icons inside the slider */
+.slider .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.slider .fa-sun {
+    left: 8px;
+    opacity: 0; /* Hidden by default (Dark Mode) */
+    color: #f59e0b;
+}
+
+.slider .fa-moon {
+    right: 8px;
+    opacity: 1; /* Visible by default (Dark Mode) */
+    color: #f1f5f9;
+}
+
+/* Checked State (Light Mode) */
+input:checked + .slider {
+    background-color: #cbd5e1;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+input:checked + .slider .fa-sun {
+    opacity: 1;
+}
+
+input:checked + .slider .fa-moon {
+    opacity: 0;
+}
+
+/* GitHub Activity Section */
+.github-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+@media (max-width: 768px) {
+    .github-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+.github-column h3 {
+    border-left: 3px solid var(--primary-color);
+    padding-left: 1rem;
+}
+
+/* Activity List */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.github-event {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    background: var(--bg-card);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s;
+}
+
+.github-event:hover {
+    transform: translateX(5px);
+    border-color: var(--primary-color);
+}
+
+.event-icon {
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    padding-top: 2px;
+}
+
+.event-content {
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.event-header {
+    margin-bottom: 0.25rem;
+}
+
+.event-action {
+    color: var(--text-muted);
+}
+
+.event-repo {
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.event-repo:hover {
+    text-decoration: underline;
+}
+
+.event-date {
+    float: right;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.event-details {
+    color: var(--text-main);
+    background: rgba(0,0,0,0.2);
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
+/* Repo Grid */
+.repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.repo-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.repo-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.repo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.repo-header h4 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.repo-stats {
+    display: flex;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.repo-desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.repo-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.repo-lang {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.lang-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.loading-state, .error-state, .empty-state {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+}
