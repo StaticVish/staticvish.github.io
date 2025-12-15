@@ -1,0 +1,83 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=description content><link href=https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css rel=stylesheet integrity=sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi crossorigin=anonymous><link href=https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css rel=stylesheet><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin=anonymous referrerpolicy=no-referrer><link rel=stylesheet href=https://www.vvisveswaran.xyz/css/profile.css><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700&family=Fira+Code&display=swap" rel=stylesheet><title>Understanding Network Topologies: A Guide with Diagrams</title></head><body class=profile-page><nav class="navbar sticky-top navbar-expand-lg"><div class="container-fluid container"><button class=navbar-toggler type=button data-bs-toggle=collapse data-bs-target=#navbarToggler aria-controls=navbarToggler aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse" id=navbarToggler><ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center"><li class=nav-item><a class="nav-link active" aria-current=page href=https://www.vvisveswaran.xyz/>Home</a></li><li class=nav-item><a class=nav-link href=https://www.vvisveswaran.xyz/blog/>Ramblings</a></li><li class=nav-item><a class=nav-link href=https://www.vvisveswaran.xyz/about/>About</a></li><li class="nav-item ms-lg-3"><div class=theme-switch-wrapper><label class=theme-switch for=checkbox><input type=checkbox id=checkbox><div class=slider><i class="fas fa-sun icon"></i>
+<i class="fas fa-moon icon"></i></div></label></div></li></ul></div></div></nav><script src=https://www.vvisveswaran.xyz/js/theme.js></script><main><div class=container style=padding-top:100px;padding-bottom:50px><article class=post-single><header class=post-header><h1 class=post-title>Understanding Network Topologies: A Guide with Diagrams</h1><div class=post-meta style=color:var(--text-muted);margin-bottom:2rem><time>December 15, 2025</time></div></header><div class=post-content style="background:var(--bg-card);padding:2rem;border-radius:12px;border:1px solid rgba(255,255,255,5%)"><p>Network topology refers to the arrangement of different elements (links, nodes, etc.) in a computer network. Think of it as the architectural map of a network. The way these components are connected can significantly impact the network&rsquo;s performance, cost, and reliability.</p><p>In this post, we&rsquo;ll explore the most common network topologies with simple diagrams and real-world examples to help you understand how they work.</p><h2 id=1-point-to-point-topology>1. Point-to-Point Topology</h2><p>The simplest topology is Point-to-Point (P2P), where a permanent link connects two endpoints directly.</p><div class=mermaid>---
+config:
+look: handDrawn
+theme: neutral
+---
+graph LR
+A[Device A] <--> B[Device B]</div><p><strong>How it works:</strong>
+It creates a direct connection between two devices. Communication is private and dedicated.</p><p><strong>Everyday Example:</strong></p><ul><li><strong>Bluetooth headphones connected to your phone:</strong> It&rsquo;s a direct, one-to-one connection.</li><li><strong>TV Remote:</strong> The infrared signal goes directly from the remote to the TV.</li></ul><h2 id=2-bus-topology>2. Bus Topology</h2><p>In a Bus topology, all devices are connected to a single central cable, often called the &ldquo;backbone.&rdquo;</p><div class=mermaid>---
+config:
+look: handDrawn
+theme: neutral
+---
+graph LR
+Backbone[================= Backbone Cable =================]
+A[Device 1] --- Backbone
+B[Device 2] --- Backbone
+C[Device 3] --- Backbone
+D[Device 4] --- Backbone</div><p><strong>How it works:</strong>
+Data travels along the backbone cable. If the destination address matches a device, that device accepts the data. If the backbone cable fails, the entire network goes down.</p><p><strong>Everyday Example:</strong></p><ul><li><strong>Christmas Lights (Old style):</strong> If one bulb goes out or the wire is cut, the whole string often stops working (though modern ones are better!).</li><li><strong>Public Bus Line:</strong> A bus travels a single route (the cable), and passengers (data) get off at specific stops (nodes).</li></ul><h2 id=3-star-topology>3. Star Topology</h2><p>In a Star topology, all devices connect to a central device, such as a switch or a hub.</p><div class=mermaid>---
+config:
+look: handDrawn
+theme: neutral
+---
+graph TD
+Hub[Central Hub/Switch]
+Hub --- A[Device 1]
+Hub --- B[Device 2]
+Hub --- C[Device 3]
+Hub --- D[Device 4]</div><p><strong>How it works:</strong>
+This is the most common topology in homes and offices. If one cable breaks, only that specific device is affected. The network relies on the central hub; if the hub fails, the network is down.</p><p><strong>Everyday Example:</strong></p><ul><li><strong>Home Wi-Fi:</strong> Your router is the central &ldquo;hub,&rdquo; and all your phones, laptops, and smart devices connect to it.</li><li><strong>Power Strip:</strong> The power strip connects to the wall (source), and multiple devices plug into the strip.</li></ul><h2 id=4-tree-topology>4. Tree Topology</h2><p>A Tree topology is a hierarchical structure, often described as a &ldquo;Star of Stars.&rdquo; It has a root node connected to other switches, which in turn connect to end devices.</p><div class=mermaid>---
+config:
+look: handDrawn
+theme: neutral
+---
+graph TD
+Root[Root Node]
+Root --- SwitchA[Switch A]
+Root --- SwitchB[Switch B]
+SwitchA --- A1[Device A1]
+SwitchA --- A2[Device A2]
+SwitchB --- B1[Device B1]
+SwitchB --- B2[Device B2]</div><p><strong>How it works:</strong>
+It is widely used in large networks. It allows for easy expansion and management of different departments or floors.</p><p><strong>Everyday Example:</strong></p><ul><li><strong>Corporate Office Network:</strong> The main server room connects to floor switches, which then connect to individual desk computers.</li><li><strong>Family Tree:</strong> You have a common ancestor (root), branching out to children and grandchildren.</li></ul><h2 id=5-mesh-topology>5. Mesh Topology</h2><p>In a Mesh topology, nodes are interconnected. In a <strong>Full Mesh</strong>, every device connects to every other device.</p><div class=mermaid>---
+config:
+look: handDrawn
+theme: neutral
+---
+graph TD
+A[Device A] --- B[Device B]
+A --- C[Device C]
+A --- D[Device D]
+B --- C
+B --- D
+C --- D</div><p><strong>How it works:</strong>
+This provides high redundancy. If one path is blocked or broken, data can take an alternative route. It is expensive due to the amount of cabling required.</p><p><strong>Everyday Example:</strong></p><ul><li><strong>The Internet:</strong> The biggest mesh of all! If one server or route goes down, traffic is rerouted through others.</li><li><strong>Peer-to-Peer file sharing:</strong> Torrent networks where every user is connected to many other users to download parts of a file.</li></ul><h2 id=6-hybrid-topology>6. Hybrid Topology</h2><p>As the name suggests, a Hybrid topology combines two or more different topologies.</p><div class=mermaid>---
+config:
+look: handDrawn
+theme: neutral
+---
+graph TD
+subgraph Star Network
+Hub[Hub] --- A[A]
+Hub --- B[B]
+end
+subgraph Bus Network
+Line[==== Bus ====]
+C[C] --- Line
+D[D] --- Line
+end
+Hub --- Line</div><p><strong>How it works:</strong>
+It leverages the strengths of different topologies. For instance, a university might use a Star topology within each building, but connect all buildings together using a Bus or Ring topology.</p><p><strong>Everyday Example:</strong></p><ul><li><strong>Large University Campus:</strong> Different departments (Star networks) are all linked together to a central backbone network.</li><li><strong>The Internet (again):</strong> It is technically a hybrid of many stars, meshes, and buses all interconnected.</li></ul><hr><p>Understanding these topologies helps in designing networks that are efficient and robust suitable for your specific needs, whether it&rsquo;s a simple home setup or a complex enterprise infrastructure.</p></div><div class=post-tags style=margin-top:2rem><a href=https://www.vvisveswaran.xyz/tags/network-topology style=color:var(--primary-color);text-decoration:none;margin-right:10px>#Network Topology</a>
+<a href=https://www.vvisveswaran.xyz/tags/bus style=color:var(--primary-color);text-decoration:none;margin-right:10px>#Bus</a>
+<a href=https://www.vvisveswaran.xyz/tags/star style=color:var(--primary-color);text-decoration:none;margin-right:10px>#Star</a>
+<a href=https://www.vvisveswaran.xyz/tags/mesh style=color:var(--primary-color);text-decoration:none;margin-right:10px>#Mesh</a>
+<a href=https://www.vvisveswaran.xyz/tags/tree style=color:var(--primary-color);text-decoration:none;margin-right:10px>#Tree</a>
+<a href=https://www.vvisveswaran.xyz/tags/hybrid style=color:var(--primary-color);text-decoration:none;margin-right:10px>#Hybrid</a></div></article></div></main><footer class=site-footer><div class=container><h3>Let's Connect</h3><div class=social-links><a href=https://twitter.com/StaticVish target=_blank class=social-link aria-label=twitter><i class="fab fa-twitter"></i>
+</a><a href=https://github.com/StaticVish target=_blank class=social-link aria-label=github><i class="fab fa-github"></i>
+</a><a href=https://www.linkedin.com/in/visveswaran-vaidyanathan/ target=_blank class=social-link aria-label=linkedin><i class="fab fa-linkedin"></i></a></div><p class=footer-copy>&copy; 2025 Visveswaran Vaidyanathan.</p></div></footer><script src=https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js integrity=sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3 crossorigin=anonymous></script><script type=module>
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script></body></html>
