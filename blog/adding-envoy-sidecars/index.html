@@ -63,7 +63,7 @@ Over the weekend, I built a local throwaway lab to put this theory to the test. 
 </span></span></code></pre></div><p>Next, I configured Envoy. It needs to send metrics to Prometheus and traces to the OpenTelemetry (OTEL) Collector. Here is the cluster configuration from <code>envoy.yaml</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#75715e># Snippet of envoy.yaml</span>
 </span></span><span style=display:flex><span><span style=color:#f92672>admin</span>:
 </span></span><span style=display:flex><span>  <span style=color:#f92672>address</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>socket_address</span>: { <span style=color:#f92672>address: 0.0.0.0, port_value</span>: <span style=color:#ae81ff>9901</span> }
+</span></span><span style=display:flex><span>    <span style=color:#f92672>socket_address</span>: { <span style=color:#f92672>address</span>: <span style=color:#f92672>0.0.0.0, port_value</span>: <span style=color:#ae81ff>9901</span> }
 </span></span><span style=display:flex><span><span style=color:#f92672>static_resources</span>:
 </span></span><span style=display:flex><span>  <span style=color:#f92672>clusters</span>:
 </span></span><span style=display:flex><span>  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>tempo_otel</span>
